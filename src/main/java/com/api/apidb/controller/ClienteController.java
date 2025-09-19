@@ -18,11 +18,15 @@ public class ClienteController {
 
 
     
-    @PostMapping
-    public Cliente criarCliente(@RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+@PostMapping
+public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
+    try {
+        Cliente clienteSalvo = clienteRepository.save(cliente);
+        return ResponseEntity.ok(clienteSalvo);
+    } catch (Exception e) {
+        return ResponseEntity.status(500).build(); // ou incluir mensagem: .body(null)
     }
-
+}
 
 
 
@@ -45,7 +49,10 @@ public class ClienteController {
 
 
 
-
+@GetMapping("/buscar")
+public List<Cliente> buscarClientePersonalizado(@RequestParam("nome_fantasia") String termo) {
+    return clienteRepository.buscarClientePersonalizado(termo);
+}
 
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> atualizarCliente(@PathVariable Long id, @RequestBody Cliente detalhesCliente) {
